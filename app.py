@@ -4,22 +4,11 @@ from flask_jwt import JWT, current_identity
 from datetime import timedelta
 
 # our libraries
-from security import authenticate, identity # implemented in security.py
-from user import UserRegister
-from item import Item, ItemList
-from item import Test
+from security import authenticate, identity 
+from resources.user import UserRegister
+from resources.item import Item, ItemList
+from resources.apitest import Test
 
-# code block to take advantage of JWTError as an error handler
-# swap this out for the security import
-# from security import authenticate, identity as identity_function
-# jwt = JWT(app, authenticate, identity_function)
-
-# @jwt.error_handler
-# def customized_error_handler(error):
-#     return jsonify({
-#                        'message': error.description,
-#                        'code': error.status_code
-#                    }), error.status_code
 
 # instantiate app
 app = Flask(__name__)
