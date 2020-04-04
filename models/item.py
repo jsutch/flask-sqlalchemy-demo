@@ -25,33 +25,34 @@ class ItemModel:
         connection.close()
 
         if row:
-            return {'item':{'name': row[0], 'price':row[1]}}
+            # update the return of the objects to use classmethod methods
+            #return cls(row[0], row[1]) #using positional arguments from the class init - cls(name, price) == ItemModel(row[0],row[1])
+            # since this changes the output from a dict, resources.item.py must use the item.json()
+            # for the correct format
+            return cls(*row) #using tuple unpacking. same return
 
-
-    @classmethod
-    def insert(cls, item):
-
+    def insert(self):
+        """
+        insert item into datastore
+        """
         connection = sqlite3.connect('data.db')
         cursor = connection.cursor()
 
         query = '''INSERT INTO items VALUES (?,?)'''
-        cursor.execute(query, (item['name'], item['price']))
+        cursor.execute(query, (self.name, self.price))
 
         connection.commit()
         connection.close()
 
-    @classmethod
-    def update(cls, item):
+    def update(self):
         """
         Update an item in the datastore
         """
-    
         connection = sqlite3.connect('data.db')
         cursor = connection.cursor()
 
-        #query = '''UPDATE {table} SET price=? WHERE name=?'''.format(cls.TABLE_NAME)
         query = '''UPDATE items SET price=? WHERE name=?'''
-        cursor.execute(query, (item['price'], item['name']))
+        cursor.execute(query, (self.price, self.name))
 
         connection.commit()
         connection.close()

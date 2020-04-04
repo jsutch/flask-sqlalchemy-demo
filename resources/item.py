@@ -7,8 +7,8 @@ from models.item import ItemModel
 
 class Item(Resource):
     """
-    Main Item Class
-    Flask-RESTful does not need jsonify for returns
+    Item Class
+    Only for Resources that interact with Flask RESTful
     """
     TABLE_NAME = 'items'
     # parser
@@ -26,7 +26,7 @@ class Item(Resource):
         """
         item = ItemModel.find_by_name(name)
         if item:
-            return item
+            return item.json()
         return {'message':'Item not found'}, 404
 
     #@jwt_required()
@@ -39,13 +39,38 @@ class Item(Resource):
             return {'message': "An item with name '{}' already exists".format(name)}, 404
 
         data = Item.parser.parse_args()
-        item = {'name':name,'price': data['price']}
+        # change item to be an ItemModel object, not a dict
+        # item = {'name':name,'price': data['price']}
+        item = ItemModel(name, data['price'])
         try:
-            ItemModel.insert(item)
+            item.insert()
         except:
             return {'message':'An error occurred'}, 500
 
-        return item, 201
+        return item.json(), 201
+
+    #@jwt_required()
+    def put(self, name):
+        """
+        Itempotent. Can create or update an item.
+        """
+        data = Item.parser.parse_args()
+        item = ItemModel.find_by_name(name)
+        # change item to be an ItemModel object, not a dict
+        #item = {'name':name,'price': data['price']}
+        updated_item = ItemModel(name,data['price'])
+
+        if item is None:
+            try:
+                updated_item.insert()
+            except:
+                return {'message':'An error occurred adding the item'}, 500    
+        else:
+            try:
+                updated_item.update()
+            except:
+                return {'message':'An error occurred updating the item'}, 500 
+        return updated_item.json()
 
     #@jwt_required()   
     def delete(self, name):
@@ -61,27 +86,6 @@ class Item(Resource):
         connection.close()
 
         return {'message':'Item Deleted'}
-
-    #@jwt_required()
-    def put(self, name):
-        """
-        Itempotent. Can create or update an item.
-        """
-        data = Item.parser.parse_args()
-        item = ItemModel.find_by_name(name)
-        updated_item = {'name':name,'price': data['price']}
-
-        if item is None:
-            try:
-                ItemModel.insert(updated_item)
-            except:
-                return {'message':'An error occurred adding the item'}, 500    
-        else:
-            try:
-                ItemModel.update(updated_item)
-            except:
-                return {'message':'An error occurred updating the item'}, 500 
-        return updated_item 
 
 
 class ItemList(Resource):
