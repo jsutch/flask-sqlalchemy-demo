@@ -1,9 +1,9 @@
 from werkzeug.security import safe_str_cmp
-from resources.user import User 
+from models.user import UserModel 
 
 # authenticate a user
 def authenticate(username,password):
-    user = User.find_by_username(username) # default mapping to None if no user is found
+    user = UserModel.find_by_username(username) # default mapping to None if no user is found
     if user and safe_str_cmp(user.password, password): # safe_str_cmp safer than passwd == mypasswd for
         return user
 
@@ -12,5 +12,5 @@ def identity(payload):
     Unique to Flask JWT. The payload is the contents of the JWT
     """
     user_id = payload['identity']
-    return User.find_by_id(user_id)
+    return UserModel.find_by_id(user_id)
 
