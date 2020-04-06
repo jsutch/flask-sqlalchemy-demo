@@ -45,7 +45,7 @@ class Item(Resource):
         # item = {'name':name,'price': data['price']}
         item = ItemModel(name, data['price'])
         try:
-            item.insert()
+            item.save_to_db()
         except:
             return {'message':'An error occurred'}, 500
 
@@ -58,20 +58,14 @@ class Item(Resource):
         """
         data = Item.parser.parse_args()
         item = ItemModel.find_by_name(name)
-        # change item to be an ItemModel object, not a dict
-        #item = {'name':name,'price': data['price']}
-        updated_item = ItemModel(name,data['price'])
 
         if item is None:
-            try:
-                updated_item.insert()
-            except:
-                return {'message':'An error occurred adding the item'}, 500    
+            item = ItemModel(name,data['price'])
         else:
-            try:
-                updated_item.update()
-            except:
-                return {'message':'An error occurred updating the item'}, 500 
+            item.price = data['price']
+        
+        item.save_to_db()
+
         return updated_item.json()
 
     @jwt_required()   
@@ -79,14 +73,9 @@ class Item(Resource):
         """
         Overwrite items list with a new list that has had 'name' removed
         """
-        connection = sqlite3.connect('code/data.db')
-        cursor = connection.cursor()
-        query = '''DELETE FROM items WHERE name =?'''
-        cursor.execute(query, (name,))
-
-        connection.commit()
-        connection.close()
-
+        item = Item.find_by_name(name)
+        if item:
+            item.delete_from_db()
         return {'message':'Item Deleted'}
 
 

@@ -1,5 +1,3 @@
-import sqlite3
-# db
 from db import db
 
 class ItemModel(db.Model):
@@ -23,45 +21,25 @@ class ItemModel(db.Model):
     @classmethod
     def find_by_name(cls, name):
         """
-        An internal method to do database lookups
+        An internal method to do database lookups.
+        SQLAlchemy method
         """
-        connection = sqlite3.connect('code/data.db')
-        cursor = connection.cursor()
+        # examples
+        #return ItemModel.query.fiter_by(name=name).filter_by(id=1) # select * from items where name=name and id=1
+        #return ItemModel.query.fiter_by(name=name, id=1)# another method. Returns itemmodel object
+        return cls.query.fiter_by(name=name).first() # select * from items where name=name, limit 1
 
-        query = '''SELECT * FROM items WHERE name =?'''
-        result = cursor.execute(query, (name, ))
-        row = result.fetchone()
-        connection.close()
-
-        if row:
-            # update the return of the objects to use classmethod methods
-            #return cls(row[0], row[1]) #using positional arguments from the class init - cls(name, price) == ItemModel(row[0],row[1])
-            # since this changes the output from a dict, resources.item.py must use the item.json()
-            # for the correct format
-            return cls(*row) #using tuple unpacking. same return
-
-    def insert(self):
+    def save_to_db(self):
         """
-        insert item into datastore
+        insert item into datastore. 
+        SQLAlchemy method combines insert and update methods ("upserting")
         """
-        connection = sqlite3.connect('code/data.db')
-        cursor = connection.cursor()
+        db.session.add(self)
+        db.commit()
 
-        query = '''INSERT INTO items VALUES (?,?)'''
-        cursor.execute(query, (self.name, self.price))
-
-        connection.commit()
-        connection.close()
-
-    def update(self):
+    def delete_from_db(self):
         """
-        Update an item in the datastore
+        Delete object from datastore
         """
-        connection = sqlite3.connect('code/data.db')
-        cursor = connection.cursor()
-
-        query = '''UPDATE items SET price=? WHERE name=?'''
-        cursor.execute(query, (self.price, self.name))
-
-        connection.commit()
-        connection.close()
+        db.session.delete(self)
+        db.commit()
