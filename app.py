@@ -4,7 +4,11 @@ from flask_jwt import JWT, current_identity
 from datetime import timedelta
 
 # our libraries
+# security
 from security import authenticate, identity 
+# db
+from db import db
+# resources
 from resources.user import UserRegister
 from resources.item import Item, ItemList
 from resources.apitest import Test
@@ -12,6 +16,11 @@ from resources.apitest import Test
 
 # instantiate app
 app = Flask(__name__)
+
+# configure SQLAlchemy
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db' 
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False #turn off Flask_SQLAlchemy change tracker
+
 # add secret key for auth
 app.secret_key = 'hummingbird'
 # instantiate API
@@ -25,6 +34,7 @@ app.config['JWT_AUTH_URL_RULE'] = '/login'
 app.config['JWT_EXPIRATION_DELTA'] = timedelta(seconds=1800)
 # config JWT auth key name to be 'email' instead of default 'username'
 # app.config['JWT_AUTH_USERNAME_KEY'] = 'email'
+
 
 # create jwt object
 jwt = JWT(app, authenticate, identity)

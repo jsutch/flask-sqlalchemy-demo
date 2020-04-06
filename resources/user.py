@@ -1,6 +1,8 @@
 import sqlite3
 from flask_restful import Resource, reqparse
 from models.user import UserModel
+# db
+from db import db
 
 class UserRegister(Resource):
     # Move parser within item instead of function by function
