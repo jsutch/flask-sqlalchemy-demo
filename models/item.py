@@ -16,7 +16,7 @@ class ItemModel:
         """
         An internal method to do database lookups
         """
-        connection = sqlite3.connect('data.db')
+        connection = sqlite3.connect('code/data.db')
         cursor = connection.cursor()
 
         query = '''SELECT * FROM items WHERE name =?'''
@@ -35,7 +35,7 @@ class ItemModel:
         """
         insert item into datastore
         """
-        connection = sqlite3.connect('data.db')
+        connection = sqlite3.connect('code/data.db')
         cursor = connection.cursor()
 
         query = '''INSERT INTO items VALUES (?,?)'''
@@ -48,7 +48,7 @@ class ItemModel:
         """
         Update an item in the datastore
         """
-        connection = sqlite3.connect('data.db')
+        connection = sqlite3.connect('code/data.db')
         cursor = connection.cursor()
 
         query = '''UPDATE items SET price=? WHERE name=?'''

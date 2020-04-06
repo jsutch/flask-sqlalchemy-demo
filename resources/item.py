@@ -19,7 +19,7 @@ class Item(Resource):
         help='This field cannot be left blank'
     )
 
-    #@jwt_required()
+    @jwt_required()
     def get(self, name):
         """
         Accept external requests for items
@@ -29,7 +29,7 @@ class Item(Resource):
             return item.json()
         return {'message':'Item not found'}, 404
 
-    #@jwt_required()
+    @jwt_required()
     def post(self, name):
         """
         Add a new item into the database
@@ -49,7 +49,7 @@ class Item(Resource):
 
         return item.json(), 201
 
-    #@jwt_required()
+    @jwt_required()
     def put(self, name):
         """
         Itempotent. Can create or update an item.
@@ -72,12 +72,12 @@ class Item(Resource):
                 return {'message':'An error occurred updating the item'}, 500 
         return updated_item.json()
 
-    #@jwt_required()   
+    @jwt_required()   
     def delete(self, name):
         """
         Overwrite items list with a new list that has had 'name' removed
         """
-        connection = sqlite3.connect('data.db')
+        connection = sqlite3.connect('code/data.db')
         cursor = connection.cursor()
         query = '''DELETE FROM items WHERE name =?'''
         cursor.execute(query, (name,))
@@ -89,12 +89,12 @@ class Item(Resource):
 
 
 class ItemList(Resource):
-    #@jwt_required()
+    @jwt_required()
     def get(self):
         """
         Return a list of all items
         """
-        connection = sqlite3.connect('data.db')
+        connection = sqlite3.connect('code/data.db')
         cursor = connection.cursor()
 
         query = '''SELECT * FROM items'''
