@@ -1,5 +1,9 @@
 from db import db
 
+# logging config
+import logging
+logging.basicConfig(filename='code/testing.log',level=logging.DEBUG)
+
 class ItemModel(db.Model):
     """
     ItemModel Class
@@ -15,6 +19,7 @@ class ItemModel(db.Model):
     def __init__(self, name, price):
         self.name = name
         self.price = price
+
     def json(self):
         return {'name':self.name,'price':self.price}
 
@@ -27,14 +32,23 @@ class ItemModel(db.Model):
         # examples
         #return ItemModel.query.fiter_by(name=name).filter_by(id=1) # select * from items where name=name and id=1
         #return ItemModel.query.fiter_by(name=name, id=1)# another method. Returns itemmodel object
-        return cls.query.fiter_by(name=name).first() # select * from items where name=name, limit 1
+        try:
+            logging.debug(name, cls.query.filter_by(name=name).first())
+            return cls.query.filter_by(name=name).first() # select * from items where name=name, limit 1
+        except Exception as e:
+            logging.debug('Exception:',e)
+            return e
 
     def save_to_db(self):
         """
         insert item into datastore. 
         SQLAlchemy method combines insert and update methods ("upserting")
         """
-        db.session.add(self)
+        try:
+            print("saving to db called", self)
+            db.session.add(self)
+        except Exception as e:
+            return e
         db.commit()
 
     def delete_from_db(self):

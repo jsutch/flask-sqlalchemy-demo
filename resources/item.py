@@ -36,7 +36,7 @@ class Item(Resource):
         """
         Add a new item into the database
         """
-        # if self.find_by_name(name): # two ways to call
+        # Call find_by_name
         if ItemModel.find_by_name(name):
             return {'message': "An item with name '{}' already exists".format(name)}, 404
 
@@ -47,7 +47,7 @@ class Item(Resource):
         try:
             item.save_to_db()
         except:
-            return {'message':'An error occurred'}, 500
+            return {'message':'Save to db failed'}, 500
 
         return item.json(), 201
 
