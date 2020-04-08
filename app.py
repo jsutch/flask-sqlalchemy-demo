@@ -28,16 +28,18 @@ from resources.apitest import Test
 # credentials
 uname = creds.username
 passwd = creds.password
+dbpath = creds.sqllitePath + 'code.db'
+datastorepath = 'sqlite:///' + dbpath
+fullSqlLitePath = creds.fullSqlLitePath
 
 # instantiate app
 app = Flask(__name__)
 
 # configure SQLAlchemy
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db' 
-#app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{uname}:{passwd}@localhost/datadb'
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join('code', '/data.db')
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////code/data.db'  #both 3 and 4 ///s fail
+app.config['SQLALCHEMY_DATABASE_URI'] = fullSqlLitePath
+#app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{uname}:{passwd}@localhost/datadb' # using mysql
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False #turn off Flask_SQLAlchemy change tracker
+app.config['PROPAGATE_EXCEPTIONS'] = True
 # db.init_app(app)
 
 # add secret key for auth
@@ -66,26 +68,6 @@ api.add_resource(Test,'/test/<string:name>')
 api.add_resource(Item,'/item/<string:name>') # e.g. http://localhost/item/mittens
 api.add_resource(ItemList, '/items')
 api.add_resource(UserRegister,'/register')
-
-@app.after_request
-def sql_debug(response):
-    # logging.basicConfig(filename='code/queries.log',level=logging.DEBUG)
-    queries = list(get_debug_queries())
-    query_str = ''
-    total_duration = 0.0
-    for q in queries:
-        total_duration += q.duration
-        stmt = str(q.statement % q.parameters).replace('\n', '\n       ')
-        query_str += 'Query: {0}\nDuration: {1}ms\n\n'.format(stmt, round(q.duration * 1000, 2))
-
-    print('=' * 80)
-    print(' SQL Queries - {0} Queries Executed in {1}ms'.format(len(queries), round(total_duration * 1000, 2)))
-    print('=' * 80)
-    print(query_str.rstrip('\n'))
-    print('=' * 80 + '\n')
-
-    # logging.debug(response) 
-    return response
 
 
 # Debug

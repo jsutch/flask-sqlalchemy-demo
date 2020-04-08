@@ -2,7 +2,8 @@ from db import db
 
 # logging config
 import logging
-logging.basicConfig(filename='code/testing.log',level=logging.DEBUG)
+logging.basicConfig(filename='code/testing.log',level=logging.DEBUG, format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
+# logging.basicConfig(format='%(asctime)s %(message)s')
 
 class ItemModel(db.Model):
     """
@@ -21,7 +22,7 @@ class ItemModel(db.Model):
         self.price = price
 
     def json(self):
-        return {'name':self.name,'price':self.price}
+        return {'name':self.name, 'price': self.price}
 
     @classmethod
     def find_by_name(cls, name):
@@ -33,10 +34,10 @@ class ItemModel(db.Model):
         #return ItemModel.query.fiter_by(name=name).filter_by(id=1) # select * from items where name=name and id=1
         #return ItemModel.query.fiter_by(name=name, id=1)# another method. Returns itemmodel object
         try:
-            logging.debug(name, cls.query.filter_by(name=name).first())
+            # logging.debug('find_by_name() called: ', name, cls.query.filter_by(name=name).first())
             return cls.query.filter_by(name=name).first() # select * from items where name=name, limit 1
         except Exception as e:
-            logging.debug('Exception:',e)
+            logging.debug('Exception:', e)
             return e
 
     def save_to_db(self):
@@ -44,16 +45,17 @@ class ItemModel(db.Model):
         insert item into datastore. 
         SQLAlchemy method combines insert and update methods ("upserting")
         """
+        db.session.add(self)
         try:
-            print("saving to db called", self)
-            db.session.add(self)
+            #logging.debug("save_to_db.commit()")
+            db.session.commit()
         except Exception as e:
+            logging.debug('save_to_db.commit() Exception: ', e)
             return e
-        db.commit()
 
     def delete_from_db(self):
         """
         Delete object from datastore
         """
         db.session.delete(self)
-        db.commit()
+        db.session.commit()

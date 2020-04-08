@@ -41,9 +41,9 @@ class Item(Resource):
             return {'message': "An item with name '{}' already exists".format(name)}, 404
 
         data = Item.parser.parse_args()
-        # change item to be an ItemModel object, not a dict
-        # item = {'name':name,'price': data['price']}
-        item = ItemModel(name, data['price'])
+
+        item = ItemModel(name, **data)
+
         try:
             item.save_to_db()
         except:
@@ -66,14 +66,14 @@ class Item(Resource):
         
         item.save_to_db()
 
-        return updated_item.json()
+        return item.json()
 
     @jwt_required()   
     def delete(self, name):
         """
         Overwrite items list with a new list that has had 'name' removed
         """
-        item = Item.find_by_name(name)
+        item = ItemModel.find_by_name(name)
         if item:
             item.delete_from_db()
         return {'message':'Item Deleted'}
@@ -93,7 +93,7 @@ class ItemList(Resource):
 
         items = []
         for row in result:
-            items.append({'name':row[0], 'price':row[1]})
+            items.append({'name':row[1], 'price':row[2]})
         
         connection.close()
 
