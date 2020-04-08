@@ -57,7 +57,7 @@ def create_tables():
 # JWT configuration
 # default creates a new endpoint of /auth
 # this can be tailored with app.config
-app.config['JWT_AUTH_URL_RULE'] = '/login'
+app.config['JWT_AUTH_URL_RULE'] = '/login' # login with /login instead of /auth
 # config JWT to expire within half an hour
 app.config['JWT_EXPIRATION_DELTA'] = timedelta(seconds=7200) # 2 hours
 # config JWT auth key name to be 'email' instead of default 'username'
@@ -71,10 +71,14 @@ jwt = JWT(app, authenticate, identity)
 # api.add_resource(xxx) replaces @app.route('xxx') under <Class>:get   
 # Raw API Tester
 api.add_resource(Test,'/test/<string:name>')
-# Application API targets
+# Item API targets
 api.add_resource(Item,'/item/<string:name>') # e.g. http://localhost/item/mittens
 api.add_resource(ItemList, '/items')
+# User API targets
 api.add_resource(UserRegister,'/register')
+# Store API targets
+api.add_resource(Store, '/store/<string:name>')
+api.add_resource(StoreList, '/stores')
 
 
 # Debug
