@@ -9,7 +9,7 @@ def authenticate(username,password):
 
 def identity(payload):
     """
-    Unique to Flask JWT. The payload is the contents of the JWT
+    Identity by ID
     """
     user_id = payload['identity']
     return UserModel.find_by_id(user_id)

@@ -36,7 +36,7 @@ class ItemModel(db.Model):
         try:
             # logging.debug('find_by_name() called: ', name, cls.query.filter_by(name=name).first())
             return cls.query.filter_by(name=name).first() # select * from items where name=name, limit 1
-        except Exception as e:
+        except Exception as e:  
             logging.debug('Exception:', e)
             return e
 
