@@ -84,5 +84,7 @@ class ItemList(Resource):
     def get(self):
         """
         Return a list of all items
+        also works with a list comprehension:
+        return {'items': [x.json() for x in ItemModel.query.all()]}
         """
         return {'items': list(map(lambda x: x.json(), ItemModel.query.all()))}
