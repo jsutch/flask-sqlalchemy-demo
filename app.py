@@ -21,9 +21,10 @@ from security import authenticate, identity
 # db
 from db import db
 # resources
+from resources.apitest import Test
 from resources.user import UserRegister
 from resources.item import Item, ItemList
-from resources.apitest import Test
+from resources.store import Store, StoreList
 
 # credentials pulled from creds.py
 uname = creds.username
@@ -70,12 +71,15 @@ jwt = JWT(app, authenticate, identity)
 # Adding resources:
 # api.add_resource(xxx) replaces @app.route('xxx') under <Class>:get   
 # Raw API Tester
-api.add_resource(Test,'/test/<string:name>')
+# api.add_resource(Test,'/test/<string:name>')
+
 # Item API targets
 api.add_resource(Item,'/item/<string:name>') # e.g. http://localhost/item/mittens
 api.add_resource(ItemList, '/items')
+
 # User API targets
 api.add_resource(UserRegister,'/register')
+
 # Store API targets
 api.add_resource(Store, '/store/<string:name>')
 api.add_resource(StoreList, '/stores')
