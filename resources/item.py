@@ -85,16 +85,4 @@ class ItemList(Resource):
         """
         Return a list of all items
         """
-        connection = sqlite3.connect('code/data.db')
-        cursor = connection.cursor()
-
-        query = '''SELECT * FROM items'''
-        result = cursor.execute(query)
-
-        items = []
-        for row in result:
-            items.append({'name':row[1], 'price':row[2]})
-        
-        connection.close()
-
-        return {'items': items }, 200
+        return {'items': list(map(lambda x: x.json(), ItemModel.query.all()))}
