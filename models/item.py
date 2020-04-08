@@ -13,6 +13,7 @@ class ItemModel(db.Model):
     __tablename__ = 'items'
     
     # show the columns in the model
+    # SQLAlchemy can use these definitions to create a new datastore at start.
     id = db.Column(db.Integer,primary_key=True)
     name = db.Column(db.String(80))
     price = db.Column(db.Float(precision=2))

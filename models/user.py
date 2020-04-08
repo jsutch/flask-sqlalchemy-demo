@@ -15,6 +15,7 @@ class UserModel(db.Model):
     __tablename__ = 'users'
     
     # show the columns in the model
+    # SQLAlchemy can use these definitions to create a new datastore at start.
     id = db.Column(db.Integer,primary_key=True)
     username = db.Column(db.String(80))
     password = db.Column(db.String(80))
