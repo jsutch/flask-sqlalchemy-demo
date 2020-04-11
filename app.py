@@ -38,7 +38,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = fullSqlLitePath
 #app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{uname}:{passwd}@localhost/datadb' # using mysql
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False #turn off Flask_SQLAlchemy change tracker
-app.config['PROPAGATE_EXCEPTIONS'] = True
+app.config['PROPAGATE_EXCEPTIONS'] = True # return internal errors, not just 500, to the user
 # db.init_app(app)
 
 # add secret key for auth
