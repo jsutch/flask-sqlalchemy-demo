@@ -42,6 +42,10 @@ class StoreModel(db.Model):
             logging.debug('Exception:', e)
             return e
 
+    @classmethod
+    def find_all(cls):
+        return cls.query.all()
+
     def save_to_db(self):
         """
         insert item into datastore.

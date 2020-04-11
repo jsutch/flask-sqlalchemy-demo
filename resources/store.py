@@ -48,4 +48,4 @@ class StoreList(Resource):
         """
         Return a list of all stores
         """
-        return {'stores': list(map(lambda x: x.json(), StoreModel.query.all()))}
+        return {'stores':  [x.json() for x in StoreModel.find_all()]}
