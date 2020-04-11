@@ -22,7 +22,7 @@ from security import authenticate, identity
 from db import db
 # resources
 from resources.apitest import Test
-from resources.user import UserRegister
+from resources.user import UserRegister, User
 from resources.item import Item, ItemList
 from resources.store import Store, StoreList
 
@@ -79,6 +79,7 @@ api.add_resource(ItemList, '/items')
 
 # User API targets
 api.add_resource(UserRegister,'/register')
+api.add_resource(User,'/user/<int:user_id>')
 
 # Store API targets
 api.add_resource(Store, '/store/<string:name>')

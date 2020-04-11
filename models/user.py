@@ -24,6 +24,13 @@ class UserModel(db.Model):
         self.username = username
         self.password = password
 
+    def json(self):
+        "return user id and username"
+        return {
+            'id': self.id,
+            'username': self.username
+        }
+
     @classmethod
     def find_by_username(cls, username):
         """
@@ -59,7 +66,7 @@ class UserModel(db.Model):
 
     def delete_from_db(self):
         """
-        Delete object from datastore
+        Delete user from datastore
         """
         db.session.delete(self)
         db.session.commit()
