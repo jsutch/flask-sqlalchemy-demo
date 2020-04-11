@@ -49,3 +49,4 @@ class StoreList(Resource):
         Return a list of all stores
         """
         return {'stores':  [x.json() for x in StoreModel.find_all()]}
+

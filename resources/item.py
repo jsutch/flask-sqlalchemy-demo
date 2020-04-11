@@ -93,4 +93,5 @@ class ItemList(Resource):
         also works with a list comprehension:
         return {'items': [x.json() for x in ItemModel.query.all()]}
         """
-        return {'items': [x.json() for x in  ItemModel.find_all()]}
+        return {'items':  [x.json() for x in ItemModel.find_all()]}
+        

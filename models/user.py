@@ -53,6 +53,13 @@ class UserModel(db.Model):
             logging.debug('Exception:', e)
             return e
 
+    @classmethod
+    def find_all(cls):
+        """
+        return all users
+        """
+        return cls.query.all()
+
     def save_to_db(self):
         """
         insert user into datastore.

@@ -22,7 +22,7 @@ from security import authenticate, identity
 from db import db
 # resources
 from resources.apitest import Test
-from resources.user import UserRegister, User
+from resources.user import UserRegister, User, UserList
 from resources.item import Item, ItemList
 from resources.store import Store, StoreList
 
@@ -66,7 +66,7 @@ app.config['JWT_EXPIRATION_DELTA'] = timedelta(seconds=7200) # 2 hours
 
 
 # create jwt object
-jwt = JWT(app, authenticate, identity)
+jwt = JWT(app, authenticate, identity) # autmatically creates an /auth endpoint. 
 
 # Adding resources:
 # api.add_resource(xxx) replaces @app.route('xxx') under <Class>:get   
@@ -80,6 +80,7 @@ api.add_resource(ItemList, '/items')
 # User API targets
 api.add_resource(UserRegister,'/register')
 api.add_resource(User,'/user/<int:user_id>')
+api.add_resource(UserList, '/users')
 
 # Store API targets
 api.add_resource(Store, '/store/<string:name>')
