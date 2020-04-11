@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_restful import Api, reqparse
-from flask_jwt import JWT, current_identity
+from flask_jwt_extended import JWTManager, current_identity
 from datetime import timedelta
 import os
 
