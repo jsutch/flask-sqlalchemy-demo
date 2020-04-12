@@ -5,8 +5,11 @@ from flask_jwt_extended import (
     jwt_required,
     get_jwt_claims,
     jwt_refresh_token_required,
-    get_jwt_identity
+    get_jwt_identity,
+    get_raw_jwt
 )
+
+from blacklist import BLACKLIST
 
 from werkzeug.security import safe_str_cmp
 
@@ -119,8 +122,13 @@ class UserLogout(Resource):
     @jwt_required
     def post(self):
         """
+        blacklist current access token to force the user to log in again
+        jti = "jwt id"
         """
-        
+        jti = get_raw_jwt()['jti'] # JTI is a unique ID for a JWT
+        BLACKLIST.add(jti)
+        return {'message':'Successfully logged out'}, 200
+
 
 class TokenRefresh(Resource):
     """
