@@ -1,0 +1,719 @@
+{
+	"info": {
+		"_postman_id": "232479a8-9793-4b0a-9f51-7f0fd66f47af",
+		"name": "Extended Flask Section 11",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "JWT Extended Tests",
+			"item": [
+				{
+					"name": "/login JWT",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "bb94b521-4bdf-4b4c-852e-6953604a804c",
+								"exec": [
+									"// get the response data",
+									"var jsonData = JSON.parse(responseBody);",
+									"// test if value not null",
+									"tests[\"Check for JWT\"]  = jsonData.access_token !== undefined;",
+									"// set the environment var with the token",
+									"pm.environment.set(\"jwt_token\", jsonData.access_token);",
+									"// get the refresh token as jwt_refresh",
+									"pm.environment.set(\"jwt_refresh\", jsonData.refresh_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwt_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\":\"adam5\",\n\t\"password\":\"asdfgh\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/login",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"login"
+							]
+						},
+						"description": "Login with JWT auth. \nNeeds this is Tests to store the token as a var\n// get the response data\nvar jsonData = JSON.parse(responseBody);\n// test if value not null\ntests[\"Check for JWT\"]  = jsonData.access_token !== undefined;\n// set the environment var with the token\npm.environment.set(\"jwt_token\", jsonData.access_token);"
+					},
+					"response": []
+				},
+				{
+					"name": "/items",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7fb926c4-bf7e-47fc-931e-698972bca431",
+								"exec": [
+									"// is status code 200?",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// is response time < 200ms?",
+									"pm.test(\"Response time is less than 200ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);",
+									"});",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{url}}/items",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"items"
+							]
+						},
+						"description": "This should return a list of items, each in JSON format"
+					},
+					"response": []
+				},
+				{
+					"name": "/stores JWT",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7fb926c4-bf7e-47fc-931e-698972bca431",
+								"exec": [
+									"// is status code 200?",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// is response time < 200ms?",
+									"pm.test(\"Response time is less than 200ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);",
+									"});",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwt_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/stores",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"stores"
+							]
+						},
+						"description": "This should return a list of stores, each in JSON format"
+					},
+					"response": []
+				},
+				{
+					"name": "/users JWT",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7fb926c4-bf7e-47fc-931e-698972bca431",
+								"exec": [
+									"// is status code 200?",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// is response time < 200ms?",
+									"pm.test(\"Response time is less than 200ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);",
+									"});",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwt_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/users",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users"
+							]
+						},
+						"description": "This should return a list of users, each in JSON format"
+					},
+					"response": []
+				},
+				{
+					"name": "/item/<name> JWT",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7fb926c4-bf7e-47fc-931e-698972bca431",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/item/piano",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"item",
+								"piano"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						},
+						"description": "This should one specific item, each in JSON format, by name with a JWT auth token."
+					},
+					"response": []
+				},
+				{
+					"name": "/item/<name> JWT",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7fb926c4-bf7e-47fc-931e-698972bca431",
+								"exec": [
+									"// is status code 200?",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"// is response time < 200ms?",
+									"pm.test(\"Response time is less than 200ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"price\": 1.66,\n\t\"store_id\": 3\n}"
+						},
+						"url": {
+							"raw": "{{url}}/item/foo7",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"item",
+								"foo7"
+							]
+						},
+						"description": "This should create one specific item, each in JSON format, by name. If the item already exists it will fail.\n\n{\n\t\"price\": 1.66,\n\t\"store_id\": 3\n}"
+					},
+					"response": []
+				},
+				{
+					"name": "/store/<name> JWT",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7fb926c4-bf7e-47fc-931e-698972bca431",
+								"exec": [
+									"// is status code 200?",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"// is response time < 200ms?",
+									"pm.test(\"Response time is less than 200ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwt_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"price\": 1.66\n}"
+						},
+						"url": {
+							"raw": "{{url}}/store/mystore6",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"store",
+								"mystore6"
+							]
+						},
+						"description": "This should create one specific store in JSON format, by name. If the store already exists it will fail"
+					},
+					"response": []
+				},
+				{
+					"name": "/item/<name> JWT",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7fb926c4-bf7e-47fc-931e-698972bca431",
+								"exec": [
+									"// get the response data",
+									"var jsonData = JSON.parse(responseBody);",
+									"// test if value not null",
+									"tests[\"Check for JWT\"]  = jsonData.access_token !== undefined;",
+									"// set the environment var with the token",
+									"pm.environment.set(\"jwt_token\", \"jsonData.access_token\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwt_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/item/foo3",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"item",
+								"foo3"
+							]
+						},
+						"description": "This should delete one specific item"
+					},
+					"response": []
+				},
+				{
+					"name": "/store/<name> JWT",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7fb926c4-bf7e-47fc-931e-698972bca431",
+								"exec": [
+									"// get the response data",
+									"var jsonData = JSON.parse(responseBody);",
+									"// test if value not null",
+									"tests[\"Check for JWT\"]  = jsonData.access_token !== undefined;",
+									"// set the environment var with the token",
+									"pm.environment.set(\"jwt_token\", \"jsonData.access_token\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwt_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/store/mystore",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"store",
+								"mystore"
+							]
+						},
+						"description": "This should create one specific store"
+					},
+					"response": []
+				},
+				{
+					"name": "/item/<name> JWT",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7fb926c4-bf7e-47fc-931e-698972bca431",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwt_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"price\": 666.66\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/item/piano",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"item",
+								"piano"
+							]
+						},
+						"description": "This should create a new item or update one existing item, each in JSON format, by name. No two items should have the same name"
+					},
+					"response": []
+				},
+				{
+					"name": "/refresh",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ecf01a74-8e68-47ec-9dae-25fb0dd3c01b",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\":\"adam6\",\n\t\"password\":\"asdfgh\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/register",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"register"
+							]
+						},
+						"description": "Register a new user"
+					},
+					"response": []
+				},
+				{
+					"name": "/logout",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ecf01a74-8e68-47ec-9dae-25fb0dd3c01b",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json",
+								"disabled": true
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\":\"adam4\",\n\t\"password\":\"asdfgh\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/logout",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"logout"
+							]
+						},
+						"description": "Register a new user"
+					},
+					"response": []
+				},
+				{
+					"name": "/user/<user_id> JWT",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7fb926c4-bf7e-47fc-931e-698972bca431",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwt_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/user/adam",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"adam"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						},
+						"description": "This should one return specific user by id, each in JSON format, by name with a JWT auth token."
+					},
+					"response": []
+				},
+				{
+					"name": "/user/<user_id> JWT",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7fb926c4-bf7e-47fc-931e-698972bca431",
+								"exec": [
+									"// get the response data",
+									"var jsonData = JSON.parse(responseBody);",
+									"// test if value not null",
+									"tests[\"Check for JWT\"]  = jsonData.access_token !== undefined;",
+									"// set the environment var with the token",
+									"pm.environment.set(\"jwt_token\", \"jsonData.access_token\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwt_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/user/2",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"2"
+							]
+						},
+						"description": "This should delete one specific user by id"
+					},
+					"response": []
+				}
+			],
+			"description": "Adding postman Tests for JWT, scripts to populate environment vars, eg. get JWT from jsonBody and create jwt_token as a variable. Also add {{url}}. In the code we're also breaking out the database code into models/ and resources/",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "a8273788-6b0c-4cd5-b918-f34fdfe4d4aa",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "0c45e53f-82c9-478c-a31a-7dea1694831e",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
