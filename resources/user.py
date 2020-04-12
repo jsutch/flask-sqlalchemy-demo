@@ -1,5 +1,5 @@
 from flask_restful import Resource, reqparse
-from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required
+from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_claims
 from werkzeug.security import safe_str_cmp
 
 # our imports
@@ -76,6 +76,9 @@ class UserList(Resource):
         """
         Get a list of users and return in json form
         """
+        claims = get_jwt_claims()
+        if not claims['is_admin']:
+            return {'message':'Admin is required'}, 401
         return {'users': [x.json() for x in UserModel.find_all()]}
 
 class UserLogin(Resource):
