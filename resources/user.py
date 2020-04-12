@@ -112,6 +112,16 @@ class UserLogin(Resource):
         return {'message':'Invalid credentials'}, 401
 
 
+class UserLogout(Resource):
+    """
+    Logout user
+    """
+    @jwt_required
+    def post(self):
+        """
+        """
+        
+
 class TokenRefresh(Resource):
     """
     """

@@ -1,7 +1,13 @@
 import sqlite3
 from flask import Flask, request
 from flask_restful import Resource, reqparse
-from flask_jwt_extended import jwt_required, get_jwt_claims, jwt_optional, get_jwt_identity
+from flask_jwt_extended import (
+    jwt_required,
+    get_jwt_claims,
+    jwt_optional,
+    get_jwt_identity,
+    fresh_jwt_required
+    )
 # db
 from db import db
 #from models.item import find_by_name, insert, update
@@ -38,7 +44,7 @@ class Item(Resource):
             return item.json()
         return {'message':'Item not found'}, 404
 
-    @jwt_required
+    @fresh_jwt_required
     def post(self, name):
         """
         Add a new item into the database
