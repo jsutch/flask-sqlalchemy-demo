@@ -65,6 +65,14 @@ app.config['JWT_EXPIRATION_DELTA'] = timedelta(seconds=7200) # 2 hours
 # create jwt object
 jwt = JWTManager(app) # doesn't create an auth endopint
 
+
+@jwt.user_claims_loader
+def add_claims_to_jwt(identity):
+    if identity == 1: # instead of hard coding this, should read from a config file/db
+        return {'is_admin': True}
+    return {'is_admin': False}
+
+
 # Adding resources:
 # api.add_resource(xxx) replaces @app.route('xxx') under <Class>:get   
 # Raw API Tester

@@ -1,7 +1,7 @@
 import sqlite3
 from flask import Flask, request
 from flask_restful import Resource, reqparse
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_claims
 # db
 from db import db
 #from models.item import find_by_name, insert, update
@@ -81,6 +81,10 @@ class Item(Resource):
         """
         Overwrite items list with a new list that has had 'name' removed
         """
+        claims = get_jwt_claims()
+        if not claims['is_admin']:
+            return {'message':'Admin is required'}, 401
+
         item = ItemModel.find_by_name(name)
         if item:
             item.delete_from_db()
