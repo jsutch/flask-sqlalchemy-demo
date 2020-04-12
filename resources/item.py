@@ -1,11 +1,12 @@
 import sqlite3
 from flask import Flask, request
 from flask_restful import Resource, reqparse
-from flask_jwt import jwt_required
+from flask_jwt_extended import jwt_required
 # db
 from db import db
 #from models.item import find_by_name, insert, update
 from models.item import ItemModel
+
 
 class Item(Resource):
     """
@@ -26,7 +27,8 @@ class Item(Resource):
         help='Every item needs a store association'
     )
 
-    @jwt_required()
+    # with flask_jwt_extended, jwt_required no longer takes arguments, so it doesn't need the ()
+    @jwt_required
     def get(self, name):
         """
         Accept external requests for items
@@ -36,7 +38,7 @@ class Item(Resource):
             return item.json()
         return {'message':'Item not found'}, 404
 
-    @jwt_required()
+    @jwt_required
     def post(self, name):
         """
         Add a new item into the database
@@ -56,7 +58,7 @@ class Item(Resource):
 
         return item.json(), 201
 
-    @jwt_required()
+    @jwt_required
     def put(self, name):
         """
         Itempotent. Can create or update an item.
@@ -74,7 +76,7 @@ class Item(Resource):
 
         return item.json()
 
-    @jwt_required()   
+    @jwt_required 
     def delete(self, name):
         """
         Overwrite items list with a new list that has had 'name' removed
@@ -86,7 +88,7 @@ class Item(Resource):
 
 
 class ItemList(Resource):
-    @jwt_required()
+    @jwt_required
     def get(self):
         """
         Return a list of all items

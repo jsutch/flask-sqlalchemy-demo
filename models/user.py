@@ -4,7 +4,10 @@ from db import db
 from flask_restful import reqparse
 # logging config
 import logging
-logging.basicConfig(filename='code/testing.log',level=logging.DEBUG, format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
+logging.basicConfig(filename='code/testing.log',
+                    level=logging.DEBUG,
+                    format='%(asctime)s %(message)s', 
+                    datefmt='%m/%d/%Y %I:%M:%S %p')
 
 
 class UserModel(db.Model):
@@ -77,3 +80,4 @@ class UserModel(db.Model):
         """
         db.session.delete(self)
         db.session.commit()
+

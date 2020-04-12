@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_restful import Api, reqparse
-from flask_jwt_extended import JWTManager, current_identity
+from flask_jwt_extended import JWTManager
 from datetime import timedelta
 import os
 
@@ -16,15 +16,14 @@ import logging
 # our libraries
 import creds
 
-# security
-from security import authenticate, identity 
 # db
 from db import db
 # resources
 from resources.apitest import Test
-from resources.user import UserRegister, User, UserList
+from resources.user import UserRegister, User, UserList, UserLogin
 from resources.item import Item, ItemList
 from resources.store import Store, StoreList
+
 
 # credentials pulled from creds.py
 uname = creds.username
@@ -56,17 +55,15 @@ def create_tables():
     db.create_all()
 
 # JWT configuration
-# default creates a new endpoint of /auth
-# this can be tailored with app.config
-app.config['JWT_AUTH_URL_RULE'] = '/login' # login with /login instead of /auth
-# config JWT to expire within half an hour
+# app.config['JWT_AUTH_URL_RULE'] = '/login' # login with /login instead of /auth
 app.config['JWT_EXPIRATION_DELTA'] = timedelta(seconds=7200) # 2 hours
 # config JWT auth key name to be 'email' instead of default 'username'
 # app.config['JWT_AUTH_USERNAME_KEY'] = 'email'
-
+# app.config['JWT_DEFAULT_REALM'] = ''
+# app.config['JWT_SECRET_KEY'] = 'bluebird' # different from app.secret key
 
 # create jwt object
-jwt = JWT(app, authenticate, identity) # autmatically creates an /auth endpoint. 
+jwt = JWTManager(app) # doesn't create an auth endopint
 
 # Adding resources:
 # api.add_resource(xxx) replaces @app.route('xxx') under <Class>:get   
@@ -78,6 +75,7 @@ api.add_resource(Item,'/item/<string:name>') # e.g. http://localhost/item/mitten
 api.add_resource(ItemList, '/items')
 
 # User API targets
+api.add_resource(UserLogin, '/login')
 api.add_resource(UserRegister,'/register')
 api.add_resource(User,'/user/<int:user_id>')
 api.add_resource(UserList, '/users')
